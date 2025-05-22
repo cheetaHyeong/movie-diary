@@ -1,3 +1,4 @@
+// 깃허브 테스트
 package com.example.moviediary.Controller;
 
 import com.example.moviediary.Repository.MovieRepository;
