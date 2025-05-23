@@ -1,6 +1,33 @@
 {{>layouts/header}}
 
-<!-- 상세 페이지 -->
+{{#movie}}
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <img src="{{posterPhoto}}" alt="영화 포스터" class="img-fluid" style="max-height: 300px;">
+    </div>
 
+    <div class="mb-3 text-center">
+        {{#isFavorite}}⭐{{/isFavorite}}
+        <h2>{{title}}</h2>
+        <span class="ms-2">별점 : ({{rating}} / 10)</span>
+    </div>
+
+    <div class="mb-3 text-center text-muted">
+        <div>관람일: {{watchedDate}}</div>
+        <div>개봉일: {{releaseDate}}</div>
+    </div>
+
+    <div class="mb-4">
+        <h5>관람평</h5>
+        <p>{{review}}</p>
+    </div>
+
+    <div>
+        <a href="/movies" class="btn btn-secondary">목록</a>
+        <a href="/movies/{{id}}/edit" class="btn btn-warning">수정</a>
+        <a href="/movies/{{id}}/delete" class="btn btn-danger">삭제</a>
+    </div>
+</div>
+{{/movie}}
 
 {{>layouts/footer}}
