@@ -16,10 +16,11 @@ public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     private String title;
 
+    @Column(length = 1000)
     private String posterPhoto;
 
     private LocalDate watchedDate;
