@@ -1,10 +1,10 @@
 .list_with_upthumb {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px; /* 아이템 사이 간격 */
+  gap: 16px;
 }
 
-.list_with_upthumb_item { /* PC 화면에서 5개 컬럼: 전체 너비의 20% */
+.list_with_upthumb_item {
   flex: 0 0 calc((100% - 4 * 16px) / 5);
   box-sizing: border-box;
 }
@@ -21,22 +21,13 @@
 }
 
 .title {
-  margin-top: 8px;
-  text-align: center;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.movie-info-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 0.5rem;
+    margin-top: 0.4rem;
 }
 
-.movie-link {
+.no-decoration {
     text-decoration: none;
-    color: inherit;
+    color: black;
 }

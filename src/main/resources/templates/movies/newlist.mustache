@@ -8,15 +8,15 @@
 
 <div class="container mt-4">
     <section>
-        <div class="section_inner">
-            <div class="list_with_upthumb pc_col5" id="movie_list">
+        <div>
+            <div class="list_with_upthumb" id="movie_list">
                 {{#movieList}}
                     <div class="list_with_upthumb_item">
-                        <a href="/movies/{{id}}" class="movie-link">
+                        <a href="/movies/{{id}}" class="no-decoration">
                             <div class="img_wrap">
-                                <img src="{{posterPhoto}}" alt="{{title}}" class="img_thumb"/>
+                                <img src="{{posterPhoto}}" alt="사진없음" class="img_thumb"/>
                             </div>
-                            <div class="movie-info-row">
+                            <div class="title">
                                 <span>{{title}}</span>
                                 {{#isFavorite}}<span>⭐</span>{{/isFavorite}}
                             </div>
