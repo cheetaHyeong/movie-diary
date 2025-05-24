@@ -16,10 +16,10 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/movies")
 public class MovieController {
-    
+
     @Autowired
     MovieRepository movieRepository;
-    
+
     @GetMapping("before")
     public String listMovies(Model model) { // 조회 페이지
 
@@ -79,21 +79,28 @@ public class MovieController {
     }
 
     @GetMapping("/{id}/edit") // 수정 페이지
-    public String editMovie() {
-        return ""; // 수정 폼 뷰 페이지 반환
+    public String editMovie(@PathVariable Long id, Model model) { // url에 id 인식, 뷰에 정보 전달
+        Movie movie = movieRepository.findById(id).orElse(null); // id에 해당하는 정보 get
+        model.addAttribute("movie", movie); // get한 변수 값을 뷰페이지에 보냄
+        return "movies/edit"; // 수정 폼 뷰 페이지 반환
     }
 
     @PostMapping("/update") // 수정 처리
-    public String updateMovie() {
-        return "";
+    public String updateMovie(MovieForm form) { // 액션으로 보낸 값 form으로 받음
+        Movie movie = form.toEntity(); // 엔티티 형태로 변환
+        Movie target = movieRepository.findById(movie.getId()).orElse(null); // id에 해당하는 값
+        if (target != null) { // 수정 값이면, 즉, 이미 있는 데이터라면 저장
+            movieRepository.save(movie);
+        }
+        return "redirect:/movies/" + target.getId(); // 상세 페이지로 리다이렉트
     }
-    
+
     @GetMapping("/{id}/delete") // 삭제 처리
-    public String deleteMovie(@PathVariable("id") Long id, RedirectAttributes rttr){
+    public String deleteMovie(@PathVariable("id") Long id, RedirectAttributes rttr) {
 
         Movie target = movieRepository.findById(id).orElse(null);
 
-        if(target != null) {
+        if (target != null) {
             movieRepository.deleteById(id);
             rttr.addFlashAttribute("msg", "삭제되었습니다.");
         }
