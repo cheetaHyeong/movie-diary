@@ -1,6 +1,43 @@
 {{>layouts/header}}
 
-<!-- 조회 페이지 -->
+<div class="container mt-4">
+    <h2>영화 감상 일지</h2>
 
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>감상일</th>
+            <th>개봉일</th>
+            <th>평점</th>
+            <th>즐겨찾기</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#movieList}}
+            <tr>
+                <td>
+                    <a href="/movies/{{id}}">{{title}}</a>
+                </td>
+                <td>{{watchedDate}}</td>
+                <td>{{releaseDate}}</td>
+                <td>{{rating}}</td>
+                <td>
+                    {{#isFavorite}}⭐️{{/isFavorite}}
+                </td>
+            </tr>
+        {{/movieList}}
+
+        {{^movieList}}
+            <tr>
+                <td colspan="7" class="text-center">등록된 영화가 없습니다.</td>
+            </tr>
+        {{/movieList}}
+        </tbody>
+    </table>
+
+    <a href="/movies/new" class="btn btn-primary mb-3">New</a>
+
+</div>
 
 {{>layouts/footer}}

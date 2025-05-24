@@ -7,10 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class MovieController {
     @Autowired
     MovieRepository movieRepository;
     
-    @GetMapping
+    @GetMapping("before")
     public String listMovies(Model model) { // 조회 페이지
 
         // 1. 모든 데이터 가져오기
@@ -34,6 +32,21 @@ public class MovieController {
         // 3. 뷰 페이지 설정하기
         return "movies/list";
     }
+
+    @GetMapping
+    public String listMovies(@RequestParam(required = false) String sort, Model model) {
+        List<Movie> movieList;
+
+        if ("favorite".equals(sort)) {
+            movieList = movieRepository.findAllByOrderByIsFavoriteDescIdAsc();
+        } else {
+            movieList = movieRepository.findAllByOrderByIdAsc(); // 기본 정렬
+        }
+
+        model.addAttribute("movieList", movieList);
+        return "movies/newlist"; // list.mustache 등
+    }
+
 
     @GetMapping("/{id}") // 상세 페이지
     public String showMovie(@PathVariable("id") Long id, Model model) {
@@ -67,16 +80,23 @@ public class MovieController {
 
     @GetMapping("/{id}/edit") // 수정 페이지
     public String editMovie() {
-        return "";
+        return ""; // 수정 폼 뷰 페이지 반환
     }
 
-    @PostMapping("/{id}/edit") // 수정 처리
+    @PostMapping("/update") // 수정 처리
     public String updateMovie() {
         return "";
     }
     
-    @GetMapping("/{id}/delete") // 삭제
-    public String deleteMovie() {
-        return "";
+    @GetMapping("/{id}/delete") // 삭제 처리
+    public String deleteMovie(@PathVariable("id") Long id, RedirectAttributes rttr){
+
+        Movie target = movieRepository.findById(id).orElse(null);
+
+        if(target != null) {
+            movieRepository.deleteById(id);
+            rttr.addFlashAttribute("msg", "삭제되었습니다.");
+        }
+        return "redirect:/movies";
     }
 }
