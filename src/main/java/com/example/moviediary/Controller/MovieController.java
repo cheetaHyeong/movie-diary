@@ -20,29 +20,14 @@ public class MovieController {
     @Autowired
     MovieRepository movieRepository;
 
-    @GetMapping("before")
-    public String listMovies(Model model) { // 조회 페이지
-
-        // 1. 모든 데이터 가져오기
-        List<Movie> movieEntityList = movieRepository.findAll();
-
-        // 2. 모델에 데이터 등록하기
-        model.addAttribute("movieList", movieEntityList);
-
-        // 3. 뷰 페이지 설정하기
-        return "movies/list";
-    }
-
     @GetMapping
     public String listMovies(@RequestParam(required = false) String sort, Model model) {
         List<Movie> movieList;
-
         if ("favorite".equals(sort)) {
             movieList = movieRepository.findAllByOrderByIsFavoriteDescIdAsc();
         } else {
             movieList = movieRepository.findAllByOrderByIdAsc(); // 기본 정렬
         }
-
         model.addAttribute("movieList", movieList);
         return "movies/newlist"; // list.mustache 등
     }
@@ -79,20 +64,20 @@ public class MovieController {
     }
 
     @GetMapping("/{id}/edit") // 수정 페이지
-    public String editMovie(@PathVariable Long id, Model model) { // url에 id 인식, 뷰에 정보 전달
-        Movie movie = movieRepository.findById(id).orElse(null); // id에 해당하는 정보 get
-        model.addAttribute("movie", movie); // get한 변수 값을 뷰페이지에 보냄
-        return "movies/edit"; // 수정 폼 뷰 페이지 반환
+    public String editMovie(@PathVariable Long id, Model model) {
+        Movie movie = movieRepository.findById(id).orElse(null);
+        model.addAttribute("movie", movie);
+        return "movies/edit";
     }
 
     @PostMapping("/update") // 수정 처리
-    public String updateMovie(MovieForm form) { // 액션으로 보낸 값 form으로 받음
-        Movie movie = form.toEntity(); // 엔티티 형태로 변환
-        Movie target = movieRepository.findById(movie.getId()).orElse(null); // id에 해당하는 값
-        if (target != null) { // 수정 값이면, 즉, 이미 있는 데이터라면 저장
+    public String updateMovie(MovieForm form) {
+        Movie movie = form.toEntity();
+        Movie target = movieRepository.findById(movie.getId()).orElse(null);
+        if (target != null) {
             movieRepository.save(movie);
         }
-        return "redirect:/movies/" + target.getId(); // 상세 페이지로 리다이렉트
+        return "redirect:/movies/" + target.getId();
     }
 
     @GetMapping("/{id}/delete") // 삭제 처리
